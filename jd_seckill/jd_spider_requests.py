@@ -363,6 +363,7 @@ class JdTdudfp:
                     await asyncio.sleep(1)
 
             await page.close()
+            exit(-1)
         except Exception as e:
             logger.info("自动获取JdTdudfp发生异常，将从配置文件读取！")
         return jd_tdudfp
@@ -642,8 +643,10 @@ class JdSeckill(object):
         resp_json = None
         try:
             resp_json = parse_json(resp.text)
+            logger.info('获取秒杀初始化信息成功')
         except Exception:
             raise SKException('抢购失败，返回信息:{}'.format(resp.text[0: 128]))
+            logger.info('获取秒杀初始化信息失败')
 
         return resp_json
 
