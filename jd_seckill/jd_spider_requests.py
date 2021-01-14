@@ -32,6 +32,8 @@ from .util import (
 from datetime import datetime, timedelta
 
 
+ONLY_GOT_EID_FP = True
+
 class SpiderSession:
     """
     Session相关操作
@@ -306,6 +308,14 @@ class JdTdudfp:
                 # 如果配置false，直接返回false
                 return jd_tdudfp
 
+            js1 = '''() =>{
+
+                Object.defineProperties(navigator,{
+                webdriver:{
+                    get: () => false
+                    }
+                })
+            }'''
             from pyppeteer import launch
             url = "https://www.jd.com/"
             browser = await launch(userDataDir=".user_data", autoClose=True,
@@ -317,6 +327,8 @@ class JdTdudfp:
             await page.setUserAgent(self.user_agent)
             for key, value in self.cookies.items():
                 await page.setCookie({"domain": ".jd.com", "name": key, "value": value})
+
+            await page.evaluate(js1)
             await page.goto(url)
             await page.waitFor(".nickname")
             logger.info("page_title:【%s】, page_url【%s】" % (await page.title(), page.url))
@@ -363,9 +375,10 @@ class JdTdudfp:
                     await asyncio.sleep(1)
 
             await page.close()
-            exit(-1)
         except Exception as e:
             logger.info("自动获取JdTdudfp发生异常，将从配置文件读取！")
+        if ONLY_GOT_EID_FP:
+            exit(0)
         return jd_tdudfp
 
 

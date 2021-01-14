@@ -25,12 +25,29 @@ class Config(object):
         self._config.read(self._path, encoding='utf-8-sig')
         self._configRaw = configparser.RawConfigParser(interpolation=EnvInterpolation())
         self._configRaw.read(self._path, encoding='utf-8-sig')
+        self._path = os.path.join(os.getcwd(), config_file)
+
+    # def init_eid_fp(self,config_file = 'eid_fp.ini'):
+    #     self._path = os.path.join(os.getcwd(), config_file)
+    #     if not os.path.exists(self._path):
+    #         print("no eid_fp.ini file")
+    #         return
+    #     _configRaw = configparser.RawConfigParser(interpolation=EnvInterpolation())
+    #     _configRaw.read(self._path, encoding='utf-8-sig')
+    #     self._eid = _configRaw.get('config', 'eid')
+    #     self._fp = _configRaw.get('config', 'fp')
+
 
     def get(self, section, name):
         return self._config.get(section, name)
 
     def getRaw(self, section, name):
         return self._configRaw.get(section, name)
+    #
+    # def get_eid(self):
+    #     pass
+    # def get_fp(self):
+
 
 
 global_config = Config()
