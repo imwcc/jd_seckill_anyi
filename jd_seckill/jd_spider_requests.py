@@ -669,7 +669,9 @@ class JdSeckill(object):
         """
         logger.info('生成提交抢购订单所需参数...')
         # 获取用户秒杀初始化信息
-        self.seckill_init_info[self.sku_id] = self._get_seckill_init_info()
+        if self.seckill_init_info.get(self.sku_id) is None:
+            logger.info("init info 已经初始化, 继续使用")
+            self.seckill_init_info[self.sku_id] = self._get_seckill_init_info()
         init_info = self.seckill_init_info.get(self.sku_id)
         default_address = init_info['addressList'][0]  # 默认地址dict
         invoice_info = init_info.get('invoiceInfo', {})  # 默认发票信息dict, 有可能不返回
